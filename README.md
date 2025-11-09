@@ -12,24 +12,24 @@ By Jonathan McCormick Jr.
 * Data Persistence via Encrypted JSON Files
 
 ### Models
-* User
+* ✅ User
     * username
     * UUIDv4
     * password (hashed)
     * an optional TOTP 2FA setup (using the `easy_totp` crate)
     * has personal sovereignty over their own respective data.
-* Epic
+* ✅ Epic
     * UUIDv4
     * Title
     * Description
     * `Status`
     * Stories (stored as a `Vec<Uuid>`)
-* Story
+* ✅ Story
     * UUIDv4
     * Title
     * Description
     * `Status`
-* `Status`
+* ✅ `Status`
     * An epic or story can have one of the following statuses: `Open`, `InProgress`, or `Closed`.
 * `Page`
     * A `Page` represents a complete screen in the CLI application, such as the Login Page, Dashboard Page, Epic Creation Page, Story Creation Page, etc.
