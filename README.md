@@ -221,7 +221,7 @@ Control flow impacts many different parts of the program. As such each function 
 Various helper functions are implemented to support the main actions, such as:
 * `hash_password(password: &str, user_uuid: Uuid) -> String` - Hashes a password using Argon2 with the user's UUID as the salt.
 * `verify_password(password: &str, hashed_password: &str, user_uuid: Uuid) -> bool` - Verifies a password against a hashed password using Argon2. Internally calls `hash_password()` and compares the result.
-* `generate_encryption_key(password: &str, user_uuid: Uuid) -> [u8; 64]` - Generates a high-entropy encryption key by concatenating the user's password and UUID, then hashing the result with SHA-512.
+* `generate_encryption_key(password: &str, user_uuid: Uuid) -> [u8; 64]` - Generates an Argon2 derived encryption key involving both the user's password and UUID.
 * `encrypt_data(data: &str, key: &[u8; 64]) -> Vec<u8>` - Encrypts data using the provided encryption key with a vetted postquantum algorithm (via the `rustls` crate).
 * `decrypt_data(encrypted_data: &[u8], key: &[u8; 64]) -> String` - Decrypts data using the provided encryption key with a vetted postquantum algorithm (via the `rustls` crate).
 * `atomic_write_to_file(file_path: &str, data: &[u8]) -> Result<(), std::io::Error>` - Writes data to a file atomically to prevent data corruption. Uses a temporary file and renames it to the target file path upon successful write.

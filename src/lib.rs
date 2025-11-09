@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 #![warn(clippy::all, clippy::pedantic)]
-#![warn(missing_docs)]
+#![forbid(missing_docs)]
+#![warn(clippy::missing_docs_in_private_items)]
 
 //! Ironyyy is a secure, offline-first project management application focused on epics and stories.
 
@@ -8,7 +9,7 @@ mod db;
 mod models;
 mod nav;
 mod pages;
-mod security;
+pub mod security;
 mod users;
 
 /// Runs the Ironyyy application.
@@ -22,3 +23,5 @@ pub fn run_app() {
     // Application entry point
     todo!()
 }
+
+fn test_undocumented_function() {}
