@@ -1,14 +1,14 @@
 use super::*;
 
 #[cfg(test)]
-const ARGON2_MEMORY_COST: u32 = 1024; // for faster tests
+const ARGON2_MEMORY_COST: u32 = 1024; // smaller for faster tests
 #[cfg(not(test))]
-const ARGON2_MEMORY_COST: u32 = 65536;
+const ARGON2_MEMORY_COST: u32 = 65536; // larger for enhanced security
 
 #[cfg(test)]
-const ARGON2_TIME_COST: u32 = 1; // for faster tests
+const ARGON2_TIME_COST: u32 = 1; // smaller for faster tests
 #[cfg(not(test))]
-const ARGON2_TIME_COST: u32 = 8;
+const ARGON2_TIME_COST: u32 = 8; // larger for enhanced security
 
 /// # Argon2 Parameters
 /// Returns Argon2 parameters configured for secure password hashing and key derivation.
