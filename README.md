@@ -40,7 +40,7 @@ By Jonathan McCormick Jr.
 * Each user has their own database file (in JSON format) stored in the `databases` folder.
 * Each database file is named after the user's UUID (e.g., `<user_uuid>.json`).
 * The database file contains all of the user's epics and stories, as well as their account information.
-* Each database file is encrypted with a vetted postquantum algorithm (via the `rustls` crate) using a high-entropy key reproducibly derived by concatenating the user's password and their (already-random) UUID.
+* Each database file is encrypted with a strong symmetric-key algorithm using a high-entropy key reproducibly derived from both the user's password and their (already-random) UUID.
 
 
 ### Control Flow
