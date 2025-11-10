@@ -5,7 +5,7 @@
 
 //! Ironyyy is a secure, offline-first project management application focused on epics and stories.
 
-mod db;
+pub mod db;
 mod models;
 mod nav;
 mod pages;

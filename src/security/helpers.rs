@@ -1,11 +1,21 @@
 use super::*;
 
+#[cfg(test)]
+const ARGON2_MEMORY_COST: u32 = 1024; // for faster tests
+#[cfg(not(test))]
+const ARGON2_MEMORY_COST: u32 = 65536;
+
+#[cfg(test)]
+const ARGON2_TIME_COST: u32 = 1; // for faster tests
+#[cfg(not(test))]
+const ARGON2_TIME_COST: u32 = 8;
+
 /// # Argon2 Parameters
 /// Returns Argon2 parameters configured for secure password hashing and key derivation.
 fn argon2_params() -> Result<Params, argon2::Error> {
     Ok(Params::new(
-        65536, // memory cost in KiB
-        8,    // time cost
+        ARGON2_MEMORY_COST, // memory cost in KiB
+        ARGON2_TIME_COST,    // time cost
         1,    // parallelism
         None, // output length (default is 32 bytes)
     )?)

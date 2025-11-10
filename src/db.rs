@@ -82,7 +82,7 @@ impl CypherTextDBState {
 /// 
 /// ## Example
 /// ```rust
-/// use crate::db::scan_for_db;
+/// use ironyyy::db::scan_for_db;
 /// scan_for_db();
 /// ```
 /// 

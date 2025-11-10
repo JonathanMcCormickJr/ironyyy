@@ -25,7 +25,7 @@ use uuid::Uuid;
 /// 
 /// Represents a hashed password using the Argon2id algorithm.
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct Argon2Hash(Vec<u8>);
+pub struct Argon2Hash(pub Vec<u8>);
 
 impl Argon2Hash {
     /// Creates a new Argon2Hash from a plaintext password and a salt.
@@ -64,7 +64,7 @@ impl Argon2Hash {
     /// use ironyyy::security::Argon2Hash;
     /// use uuid::Uuid;
     /// let salt = Uuid::new_v4();
-    /// let hash = Argon2Hash::new("my_secure_password", salt).unwrap;
+    /// let hash = Argon2Hash::new("my_secure_password", salt).unwrap();
     /// let is_valid = hash.verify_password("my_secure_password", salt).unwrap();
     /// assert!(is_valid);
     pub fn verify_password(&self, password: &str, salt: Uuid) -> Result<bool, SecurityError> {
@@ -80,7 +80,7 @@ impl Argon2Hash {
 /// # Argon2 password-derived encryption key
 /// Represents an encryption key derived from a password using Argon2id.
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct Argon2EncryptionKey([u8; 32]);
+pub struct Argon2EncryptionKey(pub [u8; 32]);
 
 impl Argon2EncryptionKey {
     /// Creates a new Argon2EncryptionKey from a plaintext password and a salt.
@@ -107,9 +107,7 @@ impl Argon2EncryptionKey {
 }
 
 /// # Ciphertext
-/// Symmetrically encrypted ciphertext.
-/// 
-/// 
+/// Symmetrically encrypted ciphertext, represented as a vector of bytes.
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Ciphertext(pub Vec<u8>);
 
@@ -132,7 +130,7 @@ impl Ciphertext {
     /// let mut nonce = [0u8; 12];
     /// OsRng.try_fill_bytes(&mut nonce).unwrap();
     /// let ciphertext = Ciphertext::encrypt("Sensitive data", &key, &nonce).unwrap();
-    /// assert_eq!(ciphertext, Ciphertext::encrypt("Sensitive data", &key, &nonce).unwrap()); // Example byte array
+    /// assert_eq!(ciphertext, Ciphertext::encrypt("Sensitive data", &key, &nonce).unwrap());
     /// ```
     pub fn encrypt(plaintext: &str, encryption_key: &Argon2EncryptionKey, nonce: &[u8; 12]) -> Result<Self, SecurityError> {
         let key: &Key<Aes256Gcm> = &encryption_key.0.into();
@@ -174,5 +172,48 @@ impl Ciphertext {
         )?;
         let plaintext = String::from_utf8(plaintext_bytes)?;
         Ok(plaintext)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand_core::{ OsRng, TryRngCore };
+    use uuid::Uuid;
+
+    #[test]
+    fn test_argon2_hash_and_verify() {
+        let salt = Uuid::new_v4();
+        let password = "my_secure_password";
+        let hash = Argon2Hash::new(password, salt).unwrap();
+        let is_valid = hash.verify_password(password, salt).unwrap();
+        assert!(is_valid);
+        let is_invalid = hash.verify_password("wrong_password", salt).unwrap();
+        assert!(!is_invalid);
+    }
+
+    #[test]
+    fn test_argon2_encryption_key_determinism() {
+        let salt = Uuid::new_v4();
+        let password = "my_secure_password";
+        let key1 = Argon2EncryptionKey::new(password, salt).unwrap();
+        let key2 = Argon2EncryptionKey::new(password, salt).unwrap();
+        assert_eq!(key1, key2);
+    }
+
+    #[test]
+    fn test_ciphertext_encrypt_decrypt() {
+        let salt = Uuid::new_v4();
+        let password = "my_secure_password";
+        let key = Argon2EncryptionKey::new(password, salt).unwrap();
+
+        let mut nonce = [0u8; 12];
+        OsRng.try_fill_bytes(&mut nonce).unwrap();
+
+        let plaintext = "Sensitive data";
+        let ciphertext = Ciphertext::encrypt(plaintext, &key, &nonce).unwrap();
+        let decrypted_plaintext = ciphertext.decrypt(&key, &nonce).unwrap();
+
+        assert_eq!(plaintext, decrypted_plaintext);
     }
 }
