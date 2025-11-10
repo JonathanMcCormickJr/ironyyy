@@ -229,3 +229,10 @@ Various helper functions are implemented to support the main actions, such as:
 * `clear_stack()` - Clears the page stack to reset navigation at the Dashboard Page.
 * `push_page(page: Box<dyn Page>)` - Pushes a new page onto the navigation stack.
 * `pop_page() -> Option<Box<dyn Page>>` - Pops the top page off the navigation stack and returns it.
+
+## Checks
+[ ] All public functions and types have documentation comments and examples where applicable.
+[ ] All private functions and types have documentation comments if `clippy::missing_docs_in_private_items` is enabled.
+[ ] The README.md file is up to date with the latest architecture and design decisions.
+[ ] Clippy pedantic lints are addressed and resolved.
+[ ] The codebase adheres to the project's coding standards and guidelines.

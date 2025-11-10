@@ -23,5 +23,3 @@ pub fn run_app() {
     // Application entry point
     todo!()
 }
-
-fn test_undocumented_function() {}

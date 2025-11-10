@@ -65,7 +65,7 @@ pub struct CypherTextDBState {
     /// The encrypted data as a vector of bytes.
     pub encrypted_data: Vec<u8>,
 }
-
+/*
 impl CypherTextDBState {
     /// Converts the CypherTextDBState back into a ClearTextDBState by decrypting the data.
     pub fn to_clear_text(self) -> Result<ClearTextDBState, Box<dyn std::error::Error>> {
@@ -74,6 +74,7 @@ impl CypherTextDBState {
         Ok(clear_text_db_state)
     }
 }
+*/
 
 
 /// # Scan for DB function
