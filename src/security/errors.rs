@@ -1,4 +1,5 @@
 use super::*;
+use rand_core::{ OsRng, TryRngCore };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SecurityError {
@@ -7,6 +8,8 @@ pub enum SecurityError {
     FromUtf8Error(std::string::FromUtf8Error),
     Hash,
     PasswordHash(argon2::password_hash::Error),
+    Totp,
+    TryRngCore,
 }
 
 impl From<aes_gcm::Error> for SecurityError {
@@ -41,6 +44,8 @@ impl std::fmt::Display for SecurityError {
             SecurityError::FromUtf8Error(err) => write!(f, "UTF-8 conversion error: {}", err),
             SecurityError::Hash => write!(f, "Hash error"), // This is due to a distinct error case from argon2's `hash`
             SecurityError::PasswordHash(err) => write!(f, "Password hash error: {}", err),
+            SecurityError::Totp => write!(f, "TOTP error"),
+            SecurityError::TryRngCore => write!(f, "Random number generation error"),
         }
     }
 }

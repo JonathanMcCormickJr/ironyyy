@@ -3,6 +3,7 @@
 
 mod errors;
 mod helpers;
+pub mod totp;
 
 use crate::security::errors::SecurityError;
 use self::helpers::{ argon2_instance };
